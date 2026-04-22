@@ -28,10 +28,10 @@ try:
     if screen_width and int(screen_width) < 768:
         st.session_state.is_mobile = True
     else:
-        st.session_state.is_mobile = True
+        st.session_state.is_mobile = False
 except:
-    st.session_state.is_mobile = True
-st.write(st.session_state.is_mobile)
+    st.session_state.is_mobile = False
+
 
 st.set_page_config(layout="wide")
 # CSS styling
