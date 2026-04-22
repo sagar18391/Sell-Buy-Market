@@ -104,7 +104,7 @@ def show_shop():
 
                             # 👉 Show ONLY selected image (top)
                             if images:
-                                st.image(images[selected_idx], use_container_width=True)
+                                st.image(images[selected_idx], width=80)
                             # 👉 Thumbnails at bottom
                             cols_img = st.columns(len(images))
 
