@@ -8,7 +8,6 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
-from dotenv import load_dotenv
 
 def show_success():
     st.title("🎉 Order Confirmed!")
@@ -168,7 +167,7 @@ def order_details(order_que, file="Data/orders.xlsx"):
 
 
 def send_email(to_email, order_details,invoice_df, pdf_bytes):
-    load_dotenv()
+    
 
     sender_email = st.secrets["EMAIL_USER"]
     app_password = st.secrets["EMAIL_PASS"]
