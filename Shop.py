@@ -8,7 +8,7 @@ from PIL import Image
 #    st.session_state.cart.append(product)
 def add_to_cart(product):
 
-
+    st.write(st.session_state.cart)
     for item in st.session_state.cart:
         if item["Index"] == product["Index"]:
             item["qty"] += 1
