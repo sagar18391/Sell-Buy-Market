@@ -8,7 +8,7 @@ from PIL import Image
 #    st.session_state.cart.append(product)
 def add_to_cart(product):
 
-    st.write(st.session_state.is_mobile)
+
     for item in st.session_state.cart:
         if item["Index"] == product["Index"]:
             item["qty"] += 1
@@ -22,14 +22,15 @@ def add_to_cart(product):
 @st.cache_data
 def load_image(path):
     img = Image.open(path)
+    #st.write(st.session_state.is_mobile)
     if st.session_state.is_mobile:
         img = img.resize((50, 50), Image.LANCZOS)
     else:
-        img = img.resize((100, 100), Image.LANCZOS)
+        img = img.resize((50, 50), Image.LANCZOS)
     return img
 
 def show_shop():
-    data = pd.read_csv("Data/products-100.csv")
+    data = pd.read_csv("data/products-100.csv")
 
     search_query = st.text_input("Search product")
 
@@ -54,49 +55,68 @@ def show_shop():
     # ---------------- LEFT SIDE (PRODUCTS) ----------------
 
     with left:
+        st.markdown("""
+        <style>
+        /* Force grid to stay horizontal */
+        div[data-testid="stHorizontalBlock"] {
+            display: flex !important;
+            flex-wrap: wrap !important;
+        }
+
+        /* Force each column to take 50% width */
+        @media (max-width: 768px) {
+            div[data-testid="column"] {
+                flex: 0 0 50% !important;
+                max-width: 50% !important;
+            }
+        }
+        </style>
+        """, unsafe_allow_html=True)
         st.title("🛍️ Marketplace")
         # Display in grid (3 columns)
         num_cols = 2 if st.session_state.is_mobile else 5
-        cols = st.columns(num_cols)
+        rows = [filtered.iloc[i:i + num_cols] for i in range(0, len(filtered), num_cols)]
 
-        for i, row in filtered.iterrows():
-            with cols[i % num_cols]:
-                with st.container():
-                    st.markdown('<div class="card">', unsafe_allow_html=True)
-                    image_folder = os.path.join("Data/Image/", str(row['Index']))
+        for row_group in rows:
+            cols = st.columns(num_cols)
+            for col, (_, row) in zip(cols, row_group.iterrows()):
+                with col:
+                    with st.container():
+                        st.markdown('<div class="card">', unsafe_allow_html=True)
+                        image_folder = os.path.join("Data/Image/", str(row['Index']))
 
-                    images = []
-                    if os.path.exists(image_folder):
-                        for file in os.listdir(image_folder):
-                            if file.endswith((".jpg", ".png", ".jpeg")):
-                                img_path = os.path.join(image_folder, file)
-                                images.append(load_image(img_path))
-                    # Image inside card
-                    if images:
-                        #st.image(images[0])  # main image
-                        selected_key = f"selected_img_{row['Index']}"
-
-                        # Default selected image
-                        if selected_key not in st.session_state:
-                            st.session_state[selected_key] = 0
-
-                        selected_idx = st.session_state[selected_key]
-
-                        # 👉 Show ONLY selected image (top)
+                        images = []
+                        if os.path.exists(image_folder):
+                            for file in os.listdir(image_folder):
+                                if file.endswith((".jpg", ".png", ".jpeg")):
+                                    img_path = os.path.join(image_folder, file)
+                                    images.append(load_image(img_path))
+                        # Image inside card
                         if images:
-                            st.image(images[selected_idx], use_container_width=True)
-                        # 👉 Thumbnails at bottom
-                        cols_img = st.columns(len(images))
+                            #st.image(images[0])  # main image
+                            selected_key = f"selected_img_{row['Index']}"
 
-                        #for idx, col in enumerate(cols_img):
-                        #    with col:
-                        #        if st.button("🔘", key=f"thumb_{row['Index']}_{idx}", type="tertiary"):
-                        #            st.session_state[selected_key] = idx
-                        #            st.rerun()
+                            # Default selected image
+                            if selected_key not in st.session_state:
+                                st.session_state[selected_key] = 0
 
-                    else:
-                        img = load_image("Data/Image/default.jpg")
-                        st.image(img)
+                            selected_idx = st.session_state[selected_key]
+
+                            # 👉 Show ONLY selected image (top)
+                            if images:
+                                st.image(images[selected_idx], use_container_width=True)
+                            # 👉 Thumbnails at bottom
+                            cols_img = st.columns(len(images))
+
+                            #for idx, col in enumerate(cols_img):
+                            #    with col:
+                            #        if st.button("🔘", key=f"thumb_{row['Index']}_{idx}", type="tertiary"):
+                            #            st.session_state[selected_key] = idx
+                            #            st.rerun()
+
+                        else:
+                            img = load_image("Data/Image/default.jpg")
+                            st.image(img)
 
                     # Product Name
                     st.markdown(f'<div class="product-name">{row["Name"]}</div>', unsafe_allow_html=True)
