@@ -30,7 +30,7 @@ def load_image(path):
     return img
 
 def show_shop():
-    data = pd.read_csv("data/products-100.csv")
+    data = pd.read_csv("Data/products-100.csv")
 
     search_query = st.text_input("Search product")
 
