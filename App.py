@@ -31,7 +31,7 @@ try:
         st.session_state.is_mobile = False
 except:
     st.session_state.is_mobile = False
-    #st.write(st.session_state.is_mobile)
+st.write(st.session_state.is_mobile)
 
 st.set_page_config(layout="wide")
 # CSS styling
