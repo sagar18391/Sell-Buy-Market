@@ -52,6 +52,7 @@ st.markdown("""
     height: auto;
     object-fit: cover;  /* crop if needed */
     border-radius: 8px;
+    flex-flow:row;
 }
 .product-name {
     height:20px;
