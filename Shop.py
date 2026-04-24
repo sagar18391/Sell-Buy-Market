@@ -99,7 +99,7 @@ def show_shop():
                                         st.markdown(f"**{row['Name']}**")
                                         st.markdown(f"₹{row['Description']}")
 
-                                        b1,b2, b3 = st.columns(3)
+                                        b1,b2, b3 = st.columns([1,3,1])
                                         with b1:
                                             st.markdown(f'<div class="price">₹{row["Price"]}</div>', unsafe_allow_html=True)
                                         with b2:
