@@ -30,7 +30,7 @@ def load_image(path):
     return img
 
 def show_shop():
-    data = pd.read_csv("Data/products-100.csv")
+    data = pd.read_csv("data/products-100.csv")
 
     search_query = st.text_input("Search product")
 
@@ -67,7 +67,7 @@ def show_shop():
 
         st.title("🛍️ Marketplace")
         # Display in grid (3 columns)
-        num_cols = 2 if st.session_state.is_mobile else 5
+        num_cols = 1 if st.session_state.is_mobile else 5
         rows = [filtered.iloc[i:i + num_cols] for i in range(0, len(filtered), num_cols)]
 
         for row_group in rows:
@@ -76,46 +76,43 @@ def show_shop():
                 with col:
                     with st.container():
                         if st.session_state.is_mobile:
-                        # use horizontal layout (above code)
-                            st.markdown('<div class="card_mobile">', unsafe_allow_html=True)
+                            for _, row in filtered.iterrows():
+                                with st.container():
+                                    st.markdown('<div class="card_mobile">', unsafe_allow_html=True)
 
-                        # 🔥 Horizontal layout inside card
-                            img_col, info_col = st.columns([1, 2])  # left image, right content
-                            image_folder = os.path.join("Data/Image/", str(row['Index']))
+                                    img_col, info_col = st.columns([1, 2])
 
-                            images = []
-                            # LEFT → IMAGE
-                            with img_col:
-                                if os.path.exists(image_folder):
-                                    for file in os.listdir(image_folder):
-                                        if file.endswith((".jpg", ".png", ".jpeg")):
-                                            img_path = os.path.join(image_folder, file)
-                                            images.append(load_image(img_path))
-                                if images:
-                                    st.image(images[0], width=70)
-                                else:
-                                    img = load_image("Data/Image/default.jpg")
-                                    st.image(img, width=70)
-                            #st.write(images)
-                            # RIGHT → INFO + BUTTONS
-                            with info_col:
-                                st.markdown(f"**{row['Name']}**")
-                                st.markdown(f"**{row['Description']}**")
+                                    image_folder = os.path.join("data/Image", str(row['Index']))
 
-                                b1, b2, b3 = st.columns(3)
-                                with b1:
-                                    st.markdown(f'<div class="price">₹{row["Price"]}</div>', unsafe_allow_html=True)
-                                with b2:
-                                    if st.button("ℹ️", key=f"view_{row['Index']}", type="tertiary"):
-                                        st.session_state.selected_product = row.to_dict()
-                                        st.session_state.page = "product"
-                                        st.rerun()
+                                    # LEFT IMAGE
+                                    with img_col:
+                                        img = load_image("data/Image/default.jpg")
+                                        if os.path.exists(image_folder):
+                                            for file in os.listdir(image_folder):
+                                                if file.endswith((".jpg", ".png", ".jpeg")):
+                                                    img = load_image(os.path.join(image_folder, file))
+                                                    break
+                                        st.image(img, width=80)
 
-                                with b3:
-                                    if st.button("➕", key=f"add_{row['Index']}", type="tertiary"):
-                                        add_to_cart(row.to_dict())
+                                    # RIGHT INFO
+                                    with info_col:
+                                        st.markdown(f"**{row['Name']}**")
+                                        st.markdown(f"₹{row['Description']}")
 
-                            st.markdown('</div>', unsafe_allow_html=True)
+                                        b1,b2, b3 = st.columns(3)
+                                        with b1:
+                                            st.markdown(f'<div class="price">₹{row["Price"]}</div>', unsafe_allow_html=True)
+                                        with b2:
+                                            if st.button("ℹ️", key=f"view_{row['Index']}"):
+                                                st.session_state.selected_product = row.to_dict()
+                                                st.session_state.page = "product"
+                                                st.rerun()
+
+                                        with b3:
+                                            if st.button("➕", key=f"add_{row['Index']}"):
+                                                add_to_cart(row.to_dict())
+
+                                    st.markdown('</div>', unsafe_allow_html=True)
                         else:
                             st.markdown('<div class="card">', unsafe_allow_html=True)
                             image_folder = os.path.join("Data/Image/", str(row['Index']))
