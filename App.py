@@ -61,6 +61,31 @@ st.markdown("""
     text-overflow: None;
     margin-bottom: 10px;
 }
+/* Product name - single line */
+.product-name-mobile {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Description - max 2 lines */
+.product-desc-mobile {
+    font-size: 12px;
+    color: #666;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Price tighter */
+.price-mobile {
+    font-weight: bold;
+    color: green;
+    font-size: 13px;
+}
 .price-row {
     margin-top: 10px;              /* PUSH TO BOTTOM */
     display: flex;
