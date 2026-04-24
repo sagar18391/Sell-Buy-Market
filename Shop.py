@@ -30,7 +30,7 @@ def load_image(path):
     return img
 
 def show_shop():
-    data = pd.read_csv("Data/products-100.csv")
+    data = pd.read_csv("data/products-100.csv")
 
     search_query = st.text_input("Search product")
 
@@ -76,43 +76,39 @@ def show_shop():
                 with col:
                     with st.container():
                         if st.session_state.is_mobile:
-                            for _, row in filtered.iterrows():
-                                with st.container():
-                                    st.markdown('<div class="card_mobile">', unsafe_allow_html=True)
 
-                                    img_col, info_col = st.columns([1, 2])
+                            st.markdown('<div class="card_mobile">', unsafe_allow_html=True)
 
-                                    image_folder = os.path.join("Data/Image", str(row['Index']))
+                            image_folder = os.path.join("data/Image", str(row['Index']))
 
-                                    # LEFT IMAGE
-                                    with img_col:
-                                        img = load_image("Data/Image/default.jpg")
-                                        if os.path.exists(image_folder):
-                                            for file in os.listdir(image_folder):
-                                                if file.endswith((".jpg", ".png", ".jpeg")):
-                                                    img = load_image(os.path.join(image_folder, file))
-                                                    break
-                                        st.image(img, width=80)
+                            c1, c2, c3 = st.columns([1, 3, 1])
 
-                                    # RIGHT INFO
-                                    with info_col:
-                                        st.markdown(f"**{row['Name']}**")
-                                        st.markdown(f"₹{row['Description']}")
+                            # IMAGE
+                            with c1:
+                                img = load_image("data/Image/default.jpg")
+                                if os.path.exists(image_folder):
+                                    for file in os.listdir(image_folder):
+                                        if file.endswith((".jpg", ".png", ".jpeg")):
+                                            img = load_image(os.path.join(image_folder, file))
+                                            break
+                                st.image(img, width=80)
 
-                                        b1,b2, b3 = st.columns([1,3,1])
-                                        with b1:
-                                            st.markdown(f'<div class="price">₹{row["Price"]}</div>', unsafe_allow_html=True)
-                                        with b2:
-                                            if st.button("ℹ️", key=f"view_{row['Index']}"):
-                                                st.session_state.selected_product = row.to_dict()
-                                                st.session_state.page = "product"
-                                                st.rerun()
+                            # TEXT
+                            with c2:
+                                st.markdown(f"**{row['Name']}**")
+                                st.markdown(f"{row['Description']}")
+                                st.markdown(f"₹{row['Price']}")
+                                if st.button("ℹ️️", key=f"view_{row['Index']}", type="tertiary"):
+                                    st.session_state.selected_product = row.to_dict()
+                                    st.session_state.page = "product"
+                                    st.rerun()
 
-                                        with b3:
-                                            if st.button("➕", key=f"add_{row['Index']}"):
-                                                add_to_cart(row.to_dict())
+                            # BUTTON
+                            with c3:
+                                if st.button("➕", key=f"add_{row['Index']}"):
+                                    add_to_cart(row.to_dict())
 
-                                    st.markdown('</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
                         else:
                             st.markdown('<div class="card">', unsafe_allow_html=True)
                             image_folder = os.path.join("Data/Image/", str(row['Index']))
