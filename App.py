@@ -22,37 +22,34 @@ if "cart" not in st.session_state:
     st.session_state.cart = []
 if "is_mobile" not in st.session_state:
     st.session_state["is_mobile"] = False
+if "show_cart" not in st.session_state:
+    st.session_state.show_cart = False
 # Toggle (for testing)
     #st.sidebar.toggle("Mobile View", key="is_mobile")
 try:
     if screen_width and int(screen_width) < 768:
         st.session_state.is_mobile = True
     else:
-        st.session_state.is_mobile = False
+        st.session_state.is_mobile = True
 except:
-    st.session_state.is_mobile = False
-
+    st.session_state.is_mobile = True
+    #st.write(st.session_state.is_mobile)
 
 st.set_page_config(layout="wide")
 # CSS styling
 st.markdown("""
 <style>
-<style>
-.card {
-    padding: 10px;
-    border-radius: 12px;
+.card_mobile {
+    padding: 1px;
+    border-radius: 10px;
     background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-    height: 350px;  /* fixed card height */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    margin-bottom: 10px;
 }
 .card img {
-    width: 150px;
-    height: 150px;
+    width: 100%;
+    max-width: 100px;
+    height: auto;
     object-fit: cover;  /* crop if needed */
     border-radius: 8px;
 }
@@ -90,7 +87,24 @@ div[data-testid="column"] > div {
 div[data-testid="stVerticalBlock"] {
     gap: 0.5rem !important;
 }
+/* Prevent elements from jumping to next line */
+@media (max-width: 768px) {
+    div[data-testid="column"] {
+        flex-wrap: nowrap !important;
+}
+/* Reduce spacing */
+div[data-testid="column"] > div {
+    gap: 4px !important;
+}
+section[data-testid="stSidebar"] {
+    display: none;
+}
 
+/* Make right column sticky */
+div[data-testid="column"]:nth-child(2) {
+    position: sticky;
+    top: 20px;
+}
 </style>
 """, unsafe_allow_html=True)
 
