@@ -79,13 +79,13 @@ def show_shop():
 
                             st.markdown('<div class="card_mobile">', unsafe_allow_html=True)
 
-                            image_folder = os.path.join("data/Image", str(row['Index']))
+                            image_folder = os.path.join("Data/Image", str(row['Index']))
 
                             c1, c2, c3 = st.columns([1, 3, 1])
 
                             # IMAGE
                             with c1:
-                                img = load_image("data/Image/default.jpg")
+                                img = load_image("Data/Image/default.jpg")
                                 if os.path.exists(image_folder):
                                     for file in os.listdir(image_folder):
                                         if file.endswith((".jpg", ".png", ".jpeg")):
