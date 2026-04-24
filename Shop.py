@@ -95,9 +95,9 @@ def show_shop():
 
                             # TEXT
                             with c2:
-                                st.markdown(f"**{row['Name']}**")
-                                st.markdown(f"{row['Description']}")
-                                st.markdown(f"₹{row['Price']}")
+                                st.markdown(f'<div class="product-name-mobile">{row["Name"]}</div>', unsafe_allow_html=True)
+                                st.markdown(f'<div class="product-desc-mobile">{row["Description"]}</div>', unsafe_allow_html=True)
+                                st.markdown(f'<div class="price-mobile">₹{row["Price"]}</div>', unsafe_allow_html=True)
                                 if st.button("ℹ️️", key=f"view_{row['Index']}", type="tertiary"):
                                     st.session_state.selected_product = row.to_dict()
                                     st.session_state.page = "product"
