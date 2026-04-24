@@ -82,11 +82,11 @@ def show_shop():
 
                                     img_col, info_col = st.columns([1, 2])
 
-                                    image_folder = os.path.join("data/Image", str(row['Index']))
+                                    image_folder = os.path.join("Data/Image", str(row['Index']))
 
                                     # LEFT IMAGE
                                     with img_col:
-                                        img = load_image("data/Image/default.jpg")
+                                        img = load_image("Data/Image/default.jpg")
                                         if os.path.exists(image_folder):
                                             for file in os.listdir(image_folder):
                                                 if file.endswith((".jpg", ".png", ".jpeg")):
